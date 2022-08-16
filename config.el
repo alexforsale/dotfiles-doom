@@ -81,3 +81,14 @@
 (use-package! fish-mode
   :config
   (setq fish-enable-auto-indent t))
+
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))
+
+(after! docker-tramp-completion-function-alist
+  :bind ("C-c d" . docker)
+  :custom (docker-image-run-arguments '("-i" "-t" "--rm")))
+
+(after! magit
+  (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")
+        magit-diff-refine-hunk 'all))
