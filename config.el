@@ -92,3 +92,6 @@
 (after! magit
   (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")
         magit-diff-refine-hunk 'all))
+
+(after! org-roam
+  (setq org-roam-directory (expand-file-name "roam" org-directory)))
