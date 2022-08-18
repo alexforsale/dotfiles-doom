@@ -95,3 +95,53 @@
 
 (after! org-roam
   (setq org-roam-directory (expand-file-name "roam" org-directory)))
+
+(setq +notmuch-sync-backend 'offlineimap
+      notmuch-saved-searches
+      '((:name "inbox" :query "tag:inbox" :key "i")
+        (:name "unread" :query "tag:unread" :key "u")
+        (:name "flagged" :query "tag:flagged" :key "f") ;starred in gmail
+        (:name "sent" :query "tag:sent" :key "t")
+        (:name "drafts" :query "tag:draft" :key "d")
+        (:name "all mail" :query "*" :key "a")
+        (:name "Today"
+         :query "date:today AND NOT tag:spam AND NOT tag:bulk"
+         :key "T"
+         :search-type 'tree
+         :sort-order 'newest-first)
+        (:name "This Week"
+         :query "date:weeks AND NOT tag:spam AND NOT tag:bulk"
+         :key "W"
+         :search-type 'tree
+         :sort-order 'newest-first)
+        (:name "This Month"
+         :query "date:months AND NOT tag:spam AND NOT tag:bulk"
+         :key "M"
+         :search-type 'tree
+         :sort-order 'newest-first)
+        (:name "flagged"
+         :query "tag:flagged AND NOT tag:spam AND NOT tag:bulk"
+         :key "f"
+         :search-type 'tree
+         :sort-order 'newest-first)
+        (:name "spam" :query "tag:spam")
+        (:name "gmail/inbox" :query "tag:gmail/inbox")
+        (:name "gmail/sent" :query "tag:gmail/sent")
+        (:name "gmail/draft" :query "tag:gmail/draft")
+        (:name "gmail/archive" :query "tag:gmail/archive")
+        (:name "gmail/spam" :query "tag:gmail/spam")
+        (:name "yahoo/inbox" :query "tag:yahoo/inbox")
+        (:name "yahoo/sent" :query "tag:yahoo/sent")
+        (:name "yahoo/draft" :query "tag:yahoo/draft")
+        (:name "yahoo/archive" :query "tag:yahoo/archive")
+        (:name "yahoo/spam" :query "tag:yahoo/spam")
+        (:name "hotmail/inbox" :query "tag:hotmail/inbox")
+        (:name "hotmail/sent" :query "tag:hotmail/sent")
+        (:name "hotmail/draft" :query "tag:hotmail/draft")
+        (:name "hotmail/archive" :query "tag:hotmail/archive")
+        (:name "hotmail/spam" :query "tag:hotmail/spam")
+        (:name "ymail/inbox" :query "tag:ymail/inbox")
+        (:name "ymail/sent" :query "tag:ymail/sent")
+        (:name "ymail/draft" :query "tag:ymail/draft")
+        (:name "ymail/archive" :query "tag:ymail/archive")
+        (:name "ymail/spam" :query "tag:ymail/spam")))
