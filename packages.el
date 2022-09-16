@@ -50,3 +50,7 @@
 ;(unpin! t)
 
 (package! fish-mode)
+(package! exwm)
+(package! exwm-modeline)
+(package! pinentry)
+(package! desktop-environment)
