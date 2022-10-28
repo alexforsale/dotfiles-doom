@@ -42,10 +42,17 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(when (file-directory-p
-       (expand-file-name "Documents/google-drive/org" (getenv "HOME")))
+(cond
+ ((file-directory-p
+   (expand-file-name "Documents/google-drive/org" (getenv "HOME")))
   (setq org-directory (expand-file-name "Documents/google-drive/org" (getenv "HOME"))))
-
+ ((file-directory-p
+   (expand-file-name "Dropbox/org" (getenv "HOME")))
+  (setq org-directory (expand-file-name "Dropbox/org" (getenv "HOME"))))
+ ((file-directory-p
+   (expand-file-name "Sync/org" (getenv "HOME")))
+  (setq org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
+ )
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;
