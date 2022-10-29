@@ -170,3 +170,112 @@
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
+
+(use-package! org-clock
+  :after org
+  :config
+  ;; save history accross `Emacs' sessions.
+  (setq org-clock-persist 'history)
+  (org-clock-persistence-insinuate))
+
+(after! org
+  (setq org-log-done 'time ;; Information to record when a task moves to the DONE state.
+        org-startup-folded t ;; Non-nil means entering Org mode will switch to OVERVIEW.
+        org-capture-templates ;; this is the default from `doom'.
+        '(("t" "Personal todo" entry
+           (file+headline +org-capture-todo-file "Inbox")
+           "* [ ] %?\n%i\n%a" :prepend t)
+          ("n" "Personal notes" entry
+           (file+headline +org-capture-notes-file "Inbox")
+           "* %u %?\n%i\n%a" :prepend t)
+          ("j" "Journal" entry
+           (file+olp+datetree +org-capture-journal-file)
+           "* %U %?\n%i\n%a" :prepend t)
+          ("p" "Templates for projects")
+          ("pt" "Project-local todo" entry
+           (file+headline +org-capture-project-todo-file "Inbox")
+           "* TODO %?\n%i\n%a" :prepend t)
+          ("pn" "Project-local notes" entry
+           (file+headline +org-capture-project-notes-file "Inbox")
+           "* %U %?\n%i\n%a" :prepend t)
+          ("pc" "Project-local changelog" entry
+           (file+headline +org-capture-project-changelog-file "Unreleased")
+           "* %U %?\n%i\n%a" :prepend t)
+          ("o" "Centralized templates for projects")
+          ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
+          ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
+          ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))
+        org-agenda-custom-commands ;; Custom commands for the agenda.
+        `(("A" "Daily Agenda and Top Priority Tasks"
+           ((tags-todo "*"
+                       ((org-agenda-skip-function '(org-agenda-skip-if nil '(timestamp)))
+                        (org-agenda-skip-function
+                         `(org-agenda-skip-entry-if 'notregexp ,(format "\\[#%s\\]" (char-to-string org-priority-highest))))
+                        (org-agenda-block-separator nil)
+                        (org-agenda-overriding-header "Important Tasks Without a Date\n")))
+            (agenda "" ((org-agenda-span 1)
+                        (org-deadline-warning-days 0)
+                        (org-agenda-block-separator nil)
+                        (org-scheduled-past-days 0)
+                        (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                        (org-agenda-format-date "%A %-e %B %Y")
+                        (org-agenda-overriding-header "\nToday's agenda\n")))
+            (agenda "" ((org-agenda-start-on-weekday nil)
+                        (org-agenda-start-day "+1d")
+                        (org-agenda-span 3)
+                        (org-deadline-warning-days 0)
+                        (org-agenda-block-separator nil)
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                        (org-agenda-overriding-header "\nNext three days\n")))
+            (agenda "" ((org-agenda-time-grid nil)
+                        (org-agenda-start-on-weekday nil)
+                        (org-agenda-start-day "+4d")
+                        (org-agenda-span 14)
+                        (org-agenda-show-all-dates nil)
+                        (org-deadline-warning-days 0)
+                        (org-agenda-block-separator nil)
+                        (org-agenda-entry-types '(:deadline))
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                        (org-agenda-overriding-header "\nUpcoming deadlines (+14d)\n")))))
+          ("P" "Plain Text Daily Agenda and Top Priorities"
+           ((tags-todo "*"
+                       ((org-agenda-skip-function '(org-agenda-skip-if nil '(timestamp)))
+                        (org-agenda-skip-function `(org-agenda-skip-entry-if 'notregexp ,(format "\\[#%s\\]" (char-to-string org-priority-highest))))
+                        (org-agenda-block-separator nil)
+                        (org-agenda-overriding-header "Important Tasks Without a Date\n")))
+            (agenda "" ((org-agenda-span 1)
+                      (org-deadline-warning-days 0)
+                      (org-agenda-block-separator nil)
+                      (org-scheduled-past-days 0)
+                      ;; We don't need the `org-agenda-date-today'
+                      ;; highlight because that only has a practical
+                      ;; utility in multi-day views.
+                      (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                      (org-agenda-format-date "%A %-e %B %Y")
+                      (org-agenda-overriding-header "\nToday's agenda\n")))
+            (agenda "" ((org-agenda-start-on-weekday nil)
+                      (org-agenda-start-day "+1d")
+                      (org-agenda-span 3)
+                      (org-deadline-warning-days 0)
+                      (org-agenda-block-separator nil)
+                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                      (org-agenda-overriding-header "\nNext three days\n")))
+            (agenda "" ((org-agenda-time-grid nil)
+                      (org-agenda-start-on-weekday nil)
+                      ;; We don't want to replicate the previous section's
+                      ;; three days, so we start counting from the day after.
+                      (org-agenda-start-day "+4d")
+                      (org-agenda-span 14)
+                      (org-agenda-show-all-dates nil)
+                      (org-deadline-warning-days 0)
+                      (org-agenda-block-separator nil)
+                      (org-agenda-entry-types '(:deadline))
+                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                      (org-agenda-overriding-header "\nUpcoming deadlines (+14d)\n"))))
+           ((org-agenda-with-colors nil)
+            (org-agenda-prefix-format "%t %s")
+            (org-agenda-current-time-string ,(car (last org-agenda-time-grid)))
+            (org-agenda-fontify-priorities nil)
+            (org-agenda-remove-tags t))
+           ("agenda.txt")))
+        ))
