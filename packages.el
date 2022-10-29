@@ -54,3 +54,8 @@
 (package! exwm-modeline)
 (package! pinentry)
 (package! desktop-environment)
+
+;; org-roam-ui
+;; https://github.com/org-roam/org-roam-ui
+(unpin! org-roam)
+(package! org-roam-ui)
