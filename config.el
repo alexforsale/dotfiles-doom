@@ -293,3 +293,7 @@
             (org-agenda-remove-tags t))
            ("agenda.txt")))
         ))
+
+(use-package! lsp-haskell
+  :hook (haskell-mode . lsp)
+  :hook (haskell-literate-mode . lsp))

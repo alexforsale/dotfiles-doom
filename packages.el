@@ -59,3 +59,6 @@
 ;; https://github.com/org-roam/org-roam-ui
 (unpin! org-roam)
 (package! org-roam-ui)
+
+;; haskel
+(package! lsp-haskell)
