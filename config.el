@@ -31,18 +31,18 @@
 (cond
  ;; `doom-font'
  ((find-font (font-spec :family "Ubuntu Mono"))
-  (setq doom-font (font-spec :family "Ubuntu Mono" :size 8)))
+  (setq doom-font (font-spec :family "Ubuntu Mono" :size 10)))
  ((find-font (font-spec :family "Fira Code Retina"))
-  (setq doom-font (font-spec :family "Fira Code Retina" :size 8)))
+  (setq doom-font (font-spec :family "Fira Code Retina" :size 10)))
  ((find-font (font-spec :family "Source Code Pro"))
-  (setq doom-font (font-spec :family "Source Code Pro" :size 8)))
+  (setq doom-font (font-spec :family "Source Code Pro" :size 10)))
  ((find-font (font-spec :family "DejaVu Sans Mono"))
-  (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 8)))
+  (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 10)))
  ;; `doom-variable-pitch-font'
  ((find-font (font-spec :family "Fira Sans"))
-  (setq doom-variable-pitch-font (font-spec :family "Fira Sans" :size 9)))
+  (setq doom-variable-pitch-font (font-spec :family "Fira Sans" :size 11)))
  ((find-font (font-spec :family "Fira Sans"))
-  (setq doom-variable-pitch-font (font-spec :family "Fira Sans" :size 9)))
+  (setq doom-variable-pitch-font (font-spec :family "Fira Sans" :size 11)))
  )
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
