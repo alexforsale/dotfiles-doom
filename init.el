@@ -160,7 +160,7 @@
         +pretty
         +roam2
         )               ; organize your plain life in plain text
-       ;;php               ; perl's insecure younger brother
+       php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
        (python +lsp +tree-sitter)            ; beautiful is better than ugly
