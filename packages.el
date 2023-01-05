@@ -62,3 +62,6 @@
 
 ;; haskel
 (package! lsp-haskell)
+
+;; web-beautify
+(package! web-beautify)

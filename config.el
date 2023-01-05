@@ -297,3 +297,9 @@
 (use-package! lsp-haskell
   :hook (haskell-mode . lsp)
   :hook (haskell-literate-mode . lsp))
+
+(use-package! web-beautify)
+(map! :localleader
+      (:after js2-mode
+       :map js2-mode-map
+       "B" #'web-beautify-js))
