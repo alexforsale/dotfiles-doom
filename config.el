@@ -305,6 +305,7 @@
                             (org-present-big)
                             (org-display-inline-images)
                             (org-present-hide-cursor)
+                            (setq org-present-hide-stars-in-headings nil)
                             (org-present-read-only)))
   :hook (org-present-quit .
                           (lambda ()
@@ -337,3 +338,14 @@
          )
        )
  )
+
+;; reveal
+(after! org
+  (load-library "ox-reveal")
+  (require 'ox-reveal)
+  (setq org-reveal-root (concat "file:///home/" user-login-name "/project/personal/reveal.js"))
+  (setq org-use-property-inheritance t
+        org-use-tag-inheritance t))
+
+;; misc
+(setq browse-url-chrome-program "firefox")

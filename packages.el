@@ -68,3 +68,5 @@
 
 ;; presentation
 (package! org-present)
+(package! org-reveal)
+(package! ox-reveal)
