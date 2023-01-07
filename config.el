@@ -299,7 +299,41 @@
   :hook (haskell-literate-mode . lsp))
 
 (use-package! web-beautify)
-(map! :localleader
-      (:after js2-mode
-       :map js2-mode-map
-       "B" #'web-beautify-js))
+(use-package! org-present
+  :hook (org-present-mode .
+                          (lambda ()
+                            (org-present-big)
+                            (org-display-inline-images)
+                            (org-present-hide-cursor)
+                            (org-present-read-only)))
+  :hook (org-present-quit .
+                          (lambda ()
+                            (org-present-small)
+                            (org-remove-inline-images)
+                            (org-present-show-cursor)
+                            (org-present-read-write)
+                            (blink-cursor-mode 1))))
+(map!
+ :localleader
+ (:after js2-mode
+  :map js2-mode-map
+  "B" #'web-beautify-js)
+ (:map org-mode-map
+       (:prefix-map ("C-p" . "org-present")
+        :desc "org-present mode" "p" #'org-present
+        :desc "Quit presentation" "q" #'org-present-quit
+        :desc "Make font size larger" "b" #'org-present-big
+        :desc "Make font size smaller" "s" #'org-present-small
+        :desc "toggle one big page" "t" #'org-present-toggle-one-big-page
+        :desc "read only" "r" #'org-present-read-only
+        :desc "write mode" "w" #'org-present-read-write
+        :desc "hide cursor" "H" #'org-present-hide-cursor
+        :desc "show cursor" "h" #'org-present-show-cursor)
+       (:when org-present-mode
+         :desc "next slide" "M-n" #'org-present-next
+         :desc "next slide" "C-n" #'org-present-next
+         :desc "previous slide" "M-p" #'org-present-next
+         :desc "previous slide" "C-p" #'org-present-next
+         )
+       )
+ )

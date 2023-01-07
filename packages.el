@@ -65,3 +65,6 @@
 
 ;; web-beautify
 (package! web-beautify)
+
+;; presentation
+(package! org-present)
