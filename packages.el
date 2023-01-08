@@ -70,3 +70,6 @@
 (package! org-present)
 (package! org-reveal)
 (package! ox-reveal)
+
+;; spelling
+(package! spell-fu)

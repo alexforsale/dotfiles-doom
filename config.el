@@ -349,3 +349,28 @@
 
 ;; misc
 (setq browse-url-chrome-program "firefox")
+
+(use-package! spell-fu
+  :hook (org-mode . (lambda ()
+                      (setq spell-fu-faces-exclude
+                            '(org-block-begin-line
+                              org-block-end-line
+                              org-code
+                              org-date
+                              org-drawer
+                              org-document-info-keyword
+                              org-ellipsis
+                              org-link
+                              org-meta-line
+                              org-properties
+                              org-properties-value
+                              org-special-keyword
+                              org-src
+                              org-tag
+                              org-verbatim))
+                      (spell-fu-mode)))
+  :hook (emacs-lisp-mode . (lambda ()
+                             (spell-fu-mode)))
+  :hook (spell-fu-mode . (lambda ()
+                           (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "en"))
+                           (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "id")))))
