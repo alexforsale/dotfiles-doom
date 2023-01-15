@@ -379,4 +379,51 @@
   :config
   (mastodon-discover)
   (setq mastodon-instance-url "https://social.alexforsale.site"
-        mastodon-active-user "alexforsale"))
+        mastodon-active-user "alexforsale")
+  (map! :map mastodon-mode-map
+        :n "q" #'quit-window
+        :leader
+        (:prefix-map ("M" . "mastodon")
+                     ;;:localleader
+                     "@" #'mastodon-notifications--get-mentions
+                     "A" #'mastodon-profile--get-toot-author
+                     "B" #'mastodon-tl--block-user
+                     "C" #'mastodon-toot--copy-toot-url
+                     "D" #'mastodon-toot--delete-and-redraft-toot
+                     "E" #'mastodon-toot--view-toot-edits
+                     "F" #'mastodon-tl--get-federated-timeline
+                     "G" #'mastodon-tl--get-follow-suggestions
+                     "H" #'mastodon-tl--get-home-timeline
+                     "I" #'mastodon-tl--view-filters
+                     "K" #'mastodon-profile--view-bookmarks
+                     "L" #'mastodon-tl--get-local-timeline
+                     "M" #'mastodon-tl--mute-user
+                     "M-n" #'mastodon-tl--next-tab-item
+                     "M-p" #'mastodon-tl--previous-tab-item
+                     "N" #'mastodon-notifications-get
+                     "O" #'mastodon-profile--my-profile
+                     "P" #'mastodon-profile--show-user
+                     "Q" #'kill-buffer-and-window
+                     "R" #'mastodon-profile--view-follow-requests
+                     "S" #'mastodon-search--search-query
+                     "S-RET" #'mastodon-tl--unmute-user
+                     "T" #'mastodon-tl--thread
+                     "U" #'mastodon-profile--update-user-profile-note
+                     "V" #'mastodon-profile--view-favourites
+                     "W" #'mastodon-tl--follow-user
+                     "X" #'mastodon-tl--view-lists
+                     "b" #'mastodon-toot--toggle-boost
+                     "c" #'mastodon-tl--toggle-spoiler-text-in-toot
+                     "d" #'mastodon-toot--delete-toot
+                     "e" #'mastodon-toot--edit-toot-at-point
+                     "f" #'mastodon-toot--toggle-favourite
+                     "g" #'mastodon-tl--update
+                     "i" #'mastodon-toot--pin-toot-toggle
+                     "k" #'mastodon-toot--bookmark-toot-toggle
+                     "n" #'mastodon-tl--goto-next-toot
+                     "p" #'mastodon-tl--goto-prev-toot
+                     "r" #'mastodon-toot--reply
+                     "t" #'mastodon-toot
+                     "u" #'mastodon-tl--update
+                     "v" #'mastodon-tl--poll-vote
+                     )))
