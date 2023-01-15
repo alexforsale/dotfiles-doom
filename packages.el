@@ -73,3 +73,7 @@
 
 ;; spelling
 (package! spell-fu)
+
+;; social
+;; mastodon
+(package! mastodon)

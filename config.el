@@ -374,3 +374,9 @@
   :hook (spell-fu-mode . (lambda ()
                            (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "en"))
                            (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "id")))))
+
+(use-package! mastodon
+  :config
+  (mastodon-discover)
+  (setq mastodon-instance-url "https://social.alexforsale.site"
+        mastodon-active-user "alexforsale"))
