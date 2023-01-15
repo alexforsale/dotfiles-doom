@@ -427,3 +427,10 @@
                      "u" #'mastodon-tl--update
                      "v" #'mastodon-tl--poll-vote
                      )))
+
+;; org-gcal
+;; (use-package! org-gcal
+;;   :init
+;;   (setq org-gcal-client-id (password-store-get "console.cloud.google.com/gcal/id")
+;;         org-gcal-client-secret (password-store-get "console.cloud.google.com/gcal/secret")
+;;         org-gcal-fetch-file-alist '(("alexarians@gmail.com" .  (expand-file-name (concat org-directory "/" "personal-calendar.org"))))))
