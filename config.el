@@ -187,15 +187,37 @@
   (org-clock-persistence-insinuate))
 
 (after! org
+  (customize-set-variable 'org-agenda-files
+                          `(,(expand-file-name "habits.org" org-directory)
+                            ,(expand-file-name "exercism.org" org-directory)
+                            ,(expand-file-name "links.org" org-directory)
+                            ,(expand-file-name "mkn.org" org-directory)
+                            ,(expand-file-name "notes.org" org-directory)
+                            ,(expand-file-name "projects.org" org-directory)
+                            ,(expand-file-name "todo.org" org-directory)
+                            ;; directories
+                            ,(expand-file-name "journal/" org-directory)
+                            ,(expand-file-name "misc/" org-directory)
+                            ,(expand-file-name "personal/" org-directory)
+                            ,(expand-file-name "roam/" org-directory)
+                            ,(expand-file-name "tasks/" org-directory)
+                            ,(expand-file-name "work/" org-directory)))
   (setq org-log-done 'time ;; Information to record when a task moves to the DONE state.
         org-startup-folded t ;; Non-nil means entering Org mode will switch to OVERVIEW.
         org-capture-templates ;; this is the default from `doom'.
-        '(("t" "Personal todo" entry
-           (file+headline +org-capture-todo-file "Inbox")
+        `(("t" "Personal todo" entry
+           (file+headline ,(expand-file-name "personal/todos.org" org-directory) "Inbox")
            "* [ ] %?\n%i\n%a" :prepend t)
           ("n" "Personal notes" entry
-           (file+headline +org-capture-notes-file "Inbox")
+           (file+headline ,(expand-file-name "personal/notes.org" org-directory) "Inbox")
            "* %u %?\n%i\n%a" :prepend t)
+          ("w" "work")
+          ("wt" "work todo" entry
+           (file+headline ,(expand-file-name "work/todos.org" org-directory) "Inbox")
+           "* %?\n%i\n%a" :prepend t :clock-in t :clock-resume t)
+          ("wn" "work notes" entry
+           (file+headline ,(expand-file-name "work/notes.org" org-directory) "Inbox")
+           "* %?\n%i\n%a" :prepend t :clock-in t :clock-resume t)
           ("j" "Journal" entry
            (file+olp+datetree +org-capture-journal-file)
            "* %U %?\n%i\n%a" :prepend t)
@@ -212,81 +234,114 @@
           ("o" "Centralized templates for projects")
           ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
           ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
-          ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))
+          ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t)
+          ("ol" "Links" entry (file ,(expand-file-name "links.org" org-directory))))
         org-agenda-custom-commands ;; Custom commands for the agenda.
-        `(("A" "Daily Agenda and Top Priority Tasks"
-           ((tags-todo "*"
-                       ((org-agenda-skip-function '(org-agenda-skip-if nil '(timestamp)))
-                        (org-agenda-skip-function
-                         `(org-agenda-skip-entry-if 'notregexp ,(format "\\[#%s\\]" (char-to-string org-priority-highest))))
-                        (org-agenda-block-separator nil)
-                        (org-agenda-overriding-header "Important Tasks Without a Date\n")))
-            (agenda "" ((org-agenda-span 1)
-                        (org-deadline-warning-days 0)
-                        (org-agenda-block-separator nil)
-                        (org-scheduled-past-days 0)
-                        (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
-                        (org-agenda-format-date "%A %-e %B %Y")
-                        (org-agenda-overriding-header "\nToday's agenda\n")))
-            (agenda "" ((org-agenda-start-on-weekday nil)
-                        (org-agenda-start-day "+1d")
-                        (org-agenda-span 3)
-                        (org-deadline-warning-days 0)
-                        (org-agenda-block-separator nil)
-                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                        (org-agenda-overriding-header "\nNext three days\n")))
-            (agenda "" ((org-agenda-time-grid nil)
-                        (org-agenda-start-on-weekday nil)
-                        (org-agenda-start-day "+4d")
-                        (org-agenda-span 14)
-                        (org-agenda-show-all-dates nil)
-                        (org-deadline-warning-days 0)
-                        (org-agenda-block-separator nil)
-                        (org-agenda-entry-types '(:deadline))
-                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                        (org-agenda-overriding-header "\nUpcoming deadlines (+14d)\n")))))
-          ("P" "Plain Text Daily Agenda and Top Priorities"
-           ((tags-todo "*"
-                       ((org-agenda-skip-function '(org-agenda-skip-if nil '(timestamp)))
-                        (org-agenda-skip-function `(org-agenda-skip-entry-if 'notregexp ,(format "\\[#%s\\]" (char-to-string org-priority-highest))))
-                        (org-agenda-block-separator nil)
-                        (org-agenda-overriding-header "Important Tasks Without a Date\n")))
-            (agenda "" ((org-agenda-span 1)
-                      (org-deadline-warning-days 0)
-                      (org-agenda-block-separator nil)
-                      (org-scheduled-past-days 0)
-                      ;; We don't need the `org-agenda-date-today'
-                      ;; highlight because that only has a practical
-                      ;; utility in multi-day views.
-                      (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
-                      (org-agenda-format-date "%A %-e %B %Y")
-                      (org-agenda-overriding-header "\nToday's agenda\n")))
-            (agenda "" ((org-agenda-start-on-weekday nil)
-                      (org-agenda-start-day "+1d")
-                      (org-agenda-span 3)
-                      (org-deadline-warning-days 0)
-                      (org-agenda-block-separator nil)
-                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                      (org-agenda-overriding-header "\nNext three days\n")))
-            (agenda "" ((org-agenda-time-grid nil)
-                      (org-agenda-start-on-weekday nil)
-                      ;; We don't want to replicate the previous section's
-                      ;; three days, so we start counting from the day after.
-                      (org-agenda-start-day "+4d")
-                      (org-agenda-span 14)
-                      (org-agenda-show-all-dates nil)
-                      (org-deadline-warning-days 0)
-                      (org-agenda-block-separator nil)
-                      (org-agenda-entry-types '(:deadline))
-                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                      (org-agenda-overriding-header "\nUpcoming deadlines (+14d)\n"))))
-           ((org-agenda-with-colors nil)
-            (org-agenda-prefix-format "%t %s")
-            (org-agenda-current-time-string ,(car (last org-agenda-time-grid)))
-            (org-agenda-fontify-priorities nil)
-            (org-agenda-remove-tags t))
-           ("agenda.txt")))
-        ))
+        `(("w" "Work Agenda and all TODOs"
+           ((agenda ""
+                    ((org-agenda-span 7)
+                     ;; (org-deadline-warning-days 0)
+                     (org-agenda-block-separator nil)
+                     (org-scheduled-past-days 0)
+                     ;; (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                     ;; (org-agenda-format-date "%A %-e %B %Y")
+                     (org-agenda-start-on-weekday 1)
+                     (org-agenda-start-day "+1d")
+                     (org-agenda-start-with-log-mode '(closed))
+                     ;; (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "HOLD" "CANCELLED" "KILL")))
+                     ;; (org-agenda-skip-function '(org-agenda-skip-entry-if '(notdeadline notscheduled)))
+                     (org-agenda-overriding-header "This Week")))
+            (tags "STYLE=\"habit\""
+                  ((org-agenda-overriding-header "Routine")))
+            (tags-todo "+work-personal"
+                       ((org-agenda-overriding-header "Work Stuffs")
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "HOLD" "CANCELLED" "KILL")))))
+            (tags-todo "-personal+{project*}-TODO=\"DONE\"-TODO=\"HOLD\"-TODO=\"CANCELLED\"-TODO=\"KILL\""
+                       ((org-agenda-overriding-header "Projects")))
+            (tags-todo "+followup-personal-TODO=\"DONE\"-TODO=\"HOLD\"-TODO=\"CANCELLED\"-TODO=\"KILL\""
+                       ((org-agenda-overriding-header "Needs Followup")))
+            (tags-todo "+learning-personal-TODO=\"DONE\"-TODO=\"HOLD\"-TODO=\"CANCELLED\"-TODO=\"KILL\""
+                       ((org-agenda-overriding-header "Learning stuffs")))
+            (tags-todo "-personal-TODO=\"DONE\"-TODO=\"HOLD\"-TODO=\"CANCELLED\"-TODO=\"KILL\""
+                       ((org-agenda-overriding-header "Inbox")))))))
+  (add-to-list 'org-agenda-custom-commands
+               `("p" "Personal Agenda and TODOs"
+                 ((agenda ""
+                          ((org-agenda-span 7)
+                           (org-agenda-block-separator nil)
+                           (org-scheduled-past-days 0)
+                           (org-agenda-start-on-weekday 1)
+                           (org-agenda-start-day "+1d")
+                           (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "HOLD" "CANCELLED" "KILL")))
+                           (org-agenda-overriding-header "This Week")))
+                  (tags "-work+STYLE=\"habit\""
+                        ((org-agenda-overriding-header "Routine")))
+                  (tags-todo "+personal"
+                             ((org-agenda-overriding-header "Personal Stuffs")
+                              (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "HOLD" "CANCELLED" "KILL")))))
+                  (tags-todo "+personal+{project*}-TODO=\"DONE\"-TODO=\"HOLD\"-TODO=\"CANCELLED\"-TODO=\"KILL\""
+                             ((org-agenda-overriding-header "Projects")))
+                  (tags-todo "+followup+personal-TODO=\"DONE\"-TODO=\"HOLD\"-TODO=\"CANCELLED\"-TODO=\"KILL\""
+                             ((org-agenda-overriding-header "Needs Followup")))
+                  (tags-todo "+learning+personal-TODO=\"DONE\"-TODO=\"HOLD\"-TODO=\"CANCELLED\"-TODO=\"KILL\""
+                             ((org-agenda-overriding-header "Personal Learning stuffs")))
+                  (tags-todo "+personal-TODO=\"DONE\"-TODO=\"HOLD\"-TODO=\"CANCELLED\"-TODO=\"KILL\""
+                             ((org-agenda-overriding-header "Personal Inbox"))))))
+  ;; from https://stackoverflow.com/questions/22394394/orgmode-a-report-of-tasks-that-are-done-within-the-week
+  (add-to-list 'org-agenda-custom-commands
+               '("R" . "Review" )
+               )
+  (setq efs/org-agenda-review-settings
+        '((org-agenda-show-all-dates t)
+          (org-agenda-start-with-log-mode '(closed))
+          (org-agenda-start-with-clockreport-mode t)
+          (org-agenda-archives-mode t)
+          ;; I don't care if an entry was archived
+          (org-agenda-hide-tags-regexp
+           (concat org-agenda-hide-tags-regexp
+                   "\\|ARCHIVE\\|archive"))
+          ))
+  (add-to-list 'org-agenda-custom-commands
+               `("Rw" "Week in review"
+                 agenda ""
+                 ;; agenda settings
+                 ,(append
+                   efs/org-agenda-review-settings
+                   '((org-agenda-span 'week)
+                     (org-agenda-start-on-weekday 0)
+                     (org-agenda-start-with-log-mode '(closed))
+                     (org-agenda-overriding-header "Week in Review"))
+                   )
+                 (,(expand-file-name "review/week.html" org-directory))
+                 ))
+  (add-to-list 'org-agenda-custom-commands
+               `("Ry" "Year in review"
+                 agenda ""
+                 ;; agenda settings
+                 ,(append
+                   efs/org-agenda-review-settings
+                   '((org-agenda-span 'year)
+                     (org-agenda-start-day "01-01")
+                     (org-read-date-prefer-future nil)
+                     (org-agenda-start-with-log-mode '(closed))
+                     (org-agenda-overriding-header "Year in Review"))
+                   )
+                 (,(expand-file-name "review/year.html" org-directory))
+                 ))
+  (add-to-list 'org-agenda-custom-commands
+               `("Rm" "Month in review"
+                 agenda ""
+                 ;; agenda settings
+                 ,(append
+                   efs/org-agenda-review-settings
+                   '((org-agenda-span 'month)
+                     (org-agenda-start-day "01")
+                     (org-read-date-prefer-future nil)
+                     (org-agenda-start-with-log-mode '(closed))
+                     (org-agenda-overriding-header "Month in Review"))
+                   )
+                 (,(expand-file-name "review/month.html" org-directory))
+                 )))
 
 (use-package! lsp-haskell
   :hook (haskell-mode . lsp)
