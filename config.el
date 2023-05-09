@@ -118,14 +118,28 @@
 
 (use-package! notmuch
   :config
-  (setq +notmuch-sync-backend 'offlineimap
+  (setq notmuch-fcc-dirs nil
+        notmuch-search-result-format
+        '(("date" . "%12s ")
+          ("count" . "%-7s ")
+          ("authors" . "%-30s ")
+          ("subject" . "%-72s ")
+          ("tags" . "(%s)"))
+        notmuch-tag-formats
+        '(("unread" (propertize tag 'face 'notmuch-tag-unread)))
+        notmuch-tagging-keys
+        '(("a" notmuch-archive-tags "Archive")
+          ("u" notmuch-show-mark-read-tags "Mark read")
+          ("f" ("+flagged") "Flag")
+          ("s" ("+spam" "-inbox") "Mark as spam")
+          ("d" ("+deleted" "-inbox") "Delete"))
         notmuch-saved-searches
-        '((:name "inbox" :query "tag:inbox" :key "i")
-          (:name "unread" :query "tag:unread" :key "u")
-          (:name "flagged" :query "tag:flagged" :key "f") ;starred in gmail
-          (:name "sent" :query "tag:sent" :key "t")
-          (:name "drafts" :query "tag:draft" :key "d")
+        '((:name "inbox" :query "tag:inbox not tag:trash" :key "i")
+          (:name "flagged" :query "tag:flagged" :key "f")
+          (:name "sent" :query "tag:sent" :key "s")
+          (:name "drafts"  :query "tag:draft" :key "d")
           (:name "all mail" :query "*" :key "a")
+          (:name "unread" :query "tag:unread" :key "u")
           (:name "Today"
            :query "date:today AND NOT tag:spam AND NOT tag:bulk"
            :key "T"
@@ -146,43 +160,24 @@
            :key "f"
            :search-type 'tree
            :sort-order 'newest-first)
-          (:name "spam" :query "tag:spam")
-          (:name "gmail/inbox" :query "tag:gmail/inbox")
-          (:name "gmail/sent" :query "tag:gmail/sent")
-          (:name "gmail/draft" :query "tag:gmail/draft")
-          (:name "gmail/archive" :query "tag:gmail/archive")
-          (:name "gmail/spam" :query "tag:gmail/spam")
-          (:name "yahoo/inbox" :query "tag:yahoo/inbox")
-          (:name "yahoo/sent" :query "tag:yahoo/sent")
-          (:name "yahoo/draft" :query "tag:yahoo/draft")
-          (:name "yahoo/archive" :query "tag:yahoo/archive")
-          (:name "yahoo/spam" :query "tag:yahoo/spam")
-          (:name "hotmail/inbox" :query "tag:hotmail/inbox")
-          (:name "hotmail/sent" :query "tag:hotmail/sent")
-          (:name "hotmail/draft" :query "tag:hotmail/draft")
-          (:name "hotmail/archive" :query "tag:hotmail/archive")
-          (:name "hotmail/spam" :query "tag:hotmail/spam")
-          (:name "ymail/inbox" :query "tag:ymail/inbox")
-          (:name "ymail/sent" :query "tag:ymail/sent")
-          (:name "ymail/draft" :query "tag:ymail/draft")
-          (:name "ymail/archive" :query "tag:ymail/archive")
-          (:name "ymail/spam" :query "tag:ymail/spam"))))
+          (:name "spam" :query "tag:spam"))
+        notmuch-archive-tags '("-inbox" "-unread")))
 
 ;; org-roam-ui
 (use-package! websocket
-    :after org-roam)
+  :after org-roam)
 
 (use-package! org-roam-ui
-    :after org ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
-;;  :hook (after-init . org-roam-ui-mode)
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
+  :after org ;; or :after org
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
 
 (use-package! org-clock
   :after org
