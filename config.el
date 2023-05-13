@@ -247,7 +247,7 @@
                      ;; (org-agenda-format-date "%A %-e %B %Y")
                      (org-agenda-start-on-weekday 1)
                      (org-agenda-start-day "+1d")
-                     (org-agenda-start-with-log-mode '(closed))
+                     ;; (org-agenda-start-with-log-mode '(closed))
                      ;; (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "HOLD" "CANCELLED" "KILL")))
                      ;; (org-agenda-skip-function '(org-agenda-skip-entry-if '(notdeadline notscheduled)))
                      (org-agenda-overriding-header "This Week")))
@@ -294,7 +294,7 @@
   (setq efs/org-agenda-review-settings
         '((org-agenda-show-all-dates t)
           (org-agenda-start-with-log-mode '(closed))
-          (org-agenda-start-with-clockreport-mode t)
+          ;; (org-agenda-start-with-clockreport-mode t)
           (org-agenda-archives-mode t)
           ;; I don't care if an entry was archived
           (org-agenda-hide-tags-regexp
@@ -309,7 +309,7 @@
                    efs/org-agenda-review-settings
                    '((org-agenda-span 'week)
                      (org-agenda-start-on-weekday 0)
-                     (org-agenda-start-with-log-mode '(closed))
+                     ;;(org-agenda-start-with-log-mode '(closed))
                      (org-agenda-overriding-header "Week in Review"))
                    )
                  (,(expand-file-name "review/week.html" org-directory))
@@ -323,7 +323,7 @@
                    '((org-agenda-span 'year)
                      (org-agenda-start-day "01-01")
                      (org-read-date-prefer-future nil)
-                     (org-agenda-start-with-log-mode '(closed))
+                     ;;(org-agenda-start-with-log-mode '(closed))
                      (org-agenda-overriding-header "Year in Review"))
                    )
                  (,(expand-file-name "review/year.html" org-directory))
@@ -337,7 +337,7 @@
                    '((org-agenda-span 'month)
                      (org-agenda-start-day "01")
                      (org-read-date-prefer-future nil)
-                     (org-agenda-start-with-log-mode '(closed))
+                     ;; (org-agenda-start-with-log-mode '(closed))
                      (org-agenda-overriding-header "Month in Review"))
                    )
                  (,(expand-file-name "review/month.html" org-directory))
